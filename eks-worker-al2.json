@@ -1,6 +1,6 @@
 {
   "variables": {
-    "aws_region": "us-west-2",
+    "aws_region": "eu-central-1",
     "ami_name": null,
     "creator": "{{env `USER`}}",
     "encrypted": "false",
@@ -23,10 +23,10 @@
     "source_ami_filter_name": "amzn2-ami-minimal-hvm-*",
     "arch": null,
     "instance_type": null,
-    "ami_description": "EKS Kubernetes Worker AMI with AmazonLinux2 image",
+    "ami_description": "EKS Kubernetes Worker AMI with Flatcar image",
 
     "ssh_interface": "",
-    "ssh_username": "ec2-user",
+    "ssh_username": "core",
     "temporary_security_group_source_cidrs": "",
     "associate_public_ip_address": "",
     "subnet_id": ""
@@ -54,7 +54,7 @@
         {
           "device_name": "/dev/xvda",
           "volume_type": "gp2",
-          "volume_size": 4,
+          "volume_size": 5,
           "delete_on_termination": true
         }
       ],
