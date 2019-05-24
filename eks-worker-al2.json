@@ -56,7 +56,7 @@
           "delete_on_termination": true
         }
       ],
-      "ssh_username": "ec2-user",
+      "ssh_username": "core",
       "ssh_pty": true,
       "encrypt_boot": "{{user `encrypted`}}",
       "kms_key_id": "{{user `kms_key_id`}}",
