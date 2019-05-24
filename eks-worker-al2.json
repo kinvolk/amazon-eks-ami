@@ -1,11 +1,11 @@
 {
   "variables": {
-    "aws_region": "us-west-2",
-    "ami_name": "amazon-eks-node-{{timestamp}}",
-    "binary_bucket_region": "us-west-2",
+    "aws_region": "eu-central-1",
+    "ami_name": "flatcar-eks-node-{{timestamp}}",
+    "binary_bucket_region": "eu-central-1",
     "creator": "{{env `USER`}}",
-    "source_ami_owners": "137112412989",
-    "source_ami_filter_name": "amzn2-ami-minimal-hvm-*",
+    "source_ami_owners": "075585003325",
+    "source_ami_filter_name": "Flatcar-edge-*",
     "encrypted": "false",
     "aws_access_key_id": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_access_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
@@ -44,7 +44,7 @@
         {
           "device_name": "/dev/xvda",
           "volume_type": "gp2",
-          "volume_size": 4,
+          "volume_size": 5,
           "delete_on_termination": true
         }
       ],

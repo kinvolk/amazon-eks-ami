@@ -4,9 +4,10 @@ CNI_VERSION ?= v0.6.0
 CNI_PLUGIN_VERSION ?= v0.7.5
 ARCH ?= x86_64
 BINARY_BUCKET_NAME ?= amazon-eks
-SOURCE_AMI_OWNERS ?= 137112412989
+# Owner of Flatcar
+SOURCE_AMI_OWNERS ?= 075585003325
 
-PACKER_BINARY ?= packer
+PACKER_BINARY ?= /home/alban/bin/packer
 AWS_BINARY ?= aws
 
 ifeq ($(ARCH), arm64)
@@ -42,7 +43,7 @@ k8s: validate
 			Name=owner-id,Values=$(SOURCE_AMI_OWNERS) \
 			Name=virtualization-type,Values=hvm \
 			Name=root-device-type,Values=ebs \
-			Name=name,Values=amzn2-ami-minimal-hvm-* \
+			Name=name,Values=Flatcar-edge-* \
 			Name=architecture,Values=$(ARCH) \
 			Name=state,Values=available \
 		--query 'max_by(Images[], &CreationDate).ImageId'))
