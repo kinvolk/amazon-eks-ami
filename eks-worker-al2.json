@@ -2,7 +2,7 @@
   "variables": {
     "aws_region": "eu-central-1",
     "ami_name": "flatcar-eks-node-{{timestamp}}",
-    "binary_bucket_region": "eu-central-1",
+    "binary_bucket_region": "us-west-2",
     "creator": "{{env `USER`}}",
     "source_ami_owners": "075585003325",
     "source_ami_filter_name": "Flatcar-edge-*",

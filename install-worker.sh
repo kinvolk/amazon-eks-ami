@@ -47,67 +47,73 @@ fi
 ### Packages ###################################################################
 ################################################################################
 
-# Update the OS to begin with to catch up to the latest packages.
-sudo yum update -y
+## Note: Flatcar does not have yum
 
-# Install necessary packages
-sudo yum install -y \
-    aws-cfn-bootstrap \
-    awscli \
-    chrony \
-    conntrack \
-    curl \
-    jq \
-    nfs-utils \
-    socat \
-    unzip \
-    wget
-
-# Make sure Amazon Time Sync Service starts on boot.
-sudo chkconfig chronyd on
-
-# Make sure that chronyd syncs RTC clock to the kernel.
-cat <<EOF | sudo tee -a /etc/chrony.conf
-# This directive enables kernel synchronisation (every 11 minutes) of the
-# real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
-rtcsync
-EOF
+## Update the OS to begin with to catch up to the latest packages.
+#sudo yum update -y
+#
+## Install necessary packages
+#sudo yum install -y \
+#    aws-cfn-bootstrap \
+#    awscli \
+#    chrony \
+#    conntrack \
+#    curl \
+#    jq \
+#    nfs-utils \
+#    socat \
+#    unzip \
+#    wget
+#
+## Make sure Amazon Time Sync Service starts on boot.
+#sudo chkconfig chronyd on
+#
+## Make sure that chronyd syncs RTC clock to the kernel.
+#cat <<EOF | sudo tee -a /etc/chrony.conf
+## This directive enables kernel synchronisation (every 11 minutes) of the
+## real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
+#rtcsync
+#EOF
 
 ################################################################################
 ### iptables ###################################################################
 ################################################################################
 
-# Enable forwarding via iptables
-sudo bash -c "/sbin/iptables-save > /etc/sysconfig/iptables"
+## Note: TODO: figure out this iptables later
 
-sudo mv $TEMPLATE_DIR/iptables-restore.service /etc/systemd/system/iptables-restore.service
-
-sudo systemctl daemon-reload
-sudo systemctl enable iptables-restore
+## Enable forwarding via iptables
+#sudo bash -c "/sbin/iptables-save > /etc/sysconfig/iptables"
+#
+#sudo mv $TEMPLATE_DIR/iptables-restore.service /etc/systemd/system/iptables-restore.service
+#
+#sudo systemctl daemon-reload
+#sudo systemctl enable iptables-restore
 
 ################################################################################
 ### Docker #####################################################################
 ################################################################################
 
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+## Note: Flatcar comes with Docker pre-installed
 
-INSTALL_DOCKER="${INSTALL_DOCKER:-true}"
-if [[ "$INSTALL_DOCKER" == "true" ]]; then
-    sudo amazon-linux-extras enable docker
-    sudo yum install -y docker-${DOCKER_VERSION}*
-    sudo usermod -aG docker $USER
-
-    # Remove all options from sysconfig docker.
-    sudo sed -i '/OPTIONS/d' /etc/sysconfig/docker
-
-    sudo mkdir -p /etc/docker
-    sudo mv $TEMPLATE_DIR/docker-daemon.json /etc/docker/daemon.json
-    sudo chown root:root /etc/docker/daemon.json
-
-    # Enable docker daemon to start on boot.
-    sudo systemctl daemon-reload
-    sudo systemctl enable docker
-fi
+#sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+#
+#INSTALL_DOCKER="${INSTALL_DOCKER:-true}"
+#if [[ "$INSTALL_DOCKER" == "true" ]]; then
+#    sudo amazon-linux-extras enable docker
+#    sudo yum install -y docker-${DOCKER_VERSION}*
+#    sudo usermod -aG docker $USER
+#
+#    # Remove all options from sysconfig docker.
+#    sudo sed -i '/OPTIONS/d' /etc/sysconfig/docker
+#
+#    sudo mkdir -p /etc/docker
+#    sudo mv $TEMPLATE_DIR/docker-daemon.json /etc/docker/daemon.json
+#    sudo chown root:root /etc/docker/daemon.json
+#
+#    # Enable docker daemon to start on boot.
+#    sudo systemctl daemon-reload
+#    sudo systemctl enable docker
+#fi
 
 ################################################################################
 ### Logrotate ##################################################################
@@ -165,7 +171,8 @@ for binary in ${BINARIES[*]} ; do
     fi
     sudo sha256sum -c $binary.sha256
     sudo chmod +x $binary
-    sudo mv $binary /usr/bin/
+    sudo mkdir -p /opt/bin
+    sudo mv $binary /opt/bin/
 done
 sudo rm *.sha256
 
@@ -219,7 +226,7 @@ sudo chown root:root /etc/eks/*
 ################################################################################
 
 # Clean up yum caches to reduce the image size
-sudo yum clean all
+# sudo yum clean all
 sudo rm -rf \
     $TEMPLATE_DIR  \
     /var/cache/yum
@@ -230,7 +237,7 @@ sudo rm -rf \
     /etc/machine-id \
     /etc/resolv.conf \
     /etc/ssh/ssh_host* \
-    /home/ec2-user/.ssh/authorized_keys \
+    /home/core/.ssh/authorized_keys \
     /root/.ssh/authorized_keys \
     /var/lib/cloud/data \
     /var/lib/cloud/instance \
